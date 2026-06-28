@@ -8,29 +8,32 @@ export function ShlokaDetailPage() {
   const navigate = useNavigate()
   const shloka = getShlokaById(id || '')
 
-  if (!shloka) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-gray-400">
-        Shloka not found
-      </div>
-    )
-  }
+  if (!shloka) return (
+    <div className="bg-page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.4)' }}>
+      Shloka not found
+    </div>
+  )
 
   return (
-    <div className="min-h-screen bg-amber-50/30 pb-24">
-      <div className="flex items-center gap-3 px-4 pt-14 pb-4">
-        <button
-          onClick={() => navigate(-1)}
-          className="w-9 h-9 rounded-full bg-white border border-gray-100 flex items-center justify-center"
-        >
-          <ArrowLeft size={16} className="text-gray-600" />
+    <div className="bg-page" style={{ minHeight: '100vh', paddingBottom: 40 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '56px 16px 20px' }}>
+        <button onClick={() => navigate(-1)} style={{
+          width: 38, height: 38, borderRadius: '50%',
+          background: 'rgba(255,255,255,0.05)',
+          border: '0.5px solid rgba(255,255,255,0.1)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+        }}>
+          <ArrowLeft size={16} color="rgba(255,255,255,0.6)" />
         </button>
-        <h1 className="text-base font-medium text-gray-700">
-          Bhagavad Gita · {shloka.id}
-        </h1>
+        <div>
+          <h1 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 20, color: '#E8B84B', fontWeight: 600 }}>
+            Bhagavad Gita · {shloka.id}
+          </h1>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>{shloka.chapter_name}</p>
+        </div>
       </div>
-      <div className="px-4">
-      <ShlokaCard shloka={shloka} />
+      <div style={{ padding: '0 16px', maxWidth: 760, margin: '0 auto' }}>
+        <ShlokaCard shloka={shloka} />
       </div>
     </div>
   )

@@ -14,71 +14,74 @@ export function TodayPage() {
   const [, setDone] = useState(false)
   const todayStr = new Date().toISOString().split('T')[0]
   const doneToday = lastReadDate === todayStr
-
   const hour = new Date().getHours()
-  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
+  const greeting = hour < 12 ? 'शुभ प्रभात' : hour < 17 ? 'शुभ दोपहर' : 'शुभ संध्या'
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #fdf6ec 0%, #faf8f4 60%)', paddingBottom: 100 }}>
+    <div className="bg-page om-bg" style={{ position: 'relative' }}>
 
-      {/* Hero header */}
-      <div style={{ position: 'relative', overflow: 'hidden', padding: '56px 20px 28px' }}>
-        {/* Decorative glow */}
-        <div style={{
-          position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
-          width: 300, height: 200,
-          background: 'radial-gradient(ellipse, rgba(232,131,26,0.12) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }} />
+      {/* Top glow */}
+      <div style={{
+        position: 'fixed', top: 0, left: 0, right: 0, height: 300, pointerEvents: 'none', zIndex: 0,
+        background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(232,131,26,0.15) 0%, transparent 100%)',
+      }} />
 
-        <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <p style={{ fontSize: 13, color: '#C4956A', marginBottom: 2 }}>
+      {/* Header */}
+      <div style={{ position: 'relative', zIndex: 1, padding: '56px 20px 24px' }}>
+        <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
+
+          {/* Greeting */}
+          <p style={{ fontFamily: 'Noto Sans Devanagari, sans-serif', fontSize: 13, color: 'rgba(232,131,26,0.7)', marginBottom: 6, letterSpacing: '.05em' }}>
             {greeting}{user?.name ? `, ${user.name}` : ''} 🙏
           </p>
+
+          {/* Title */}
           <h1 style={{
             fontFamily: 'Cormorant Garamond, serif',
-            fontSize: 30, fontWeight: 600,
-            color: '#1A0A00', lineHeight: 1.2, marginBottom: 4,
+            fontSize: 36, fontWeight: 700,
+            lineHeight: 1.1, marginBottom: 4,
+            background: 'linear-gradient(135deg, #E8B84B, #C8960C)',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
           }}>
             Today's Shloka
           </h1>
-          <p style={{ fontSize: 12, color: '#C4956A' }}>{formatDate(new Date())}</p>
+
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', letterSpacing: '.04em' }}>
+            {formatDate(new Date())}
+          </p>
         </motion.div>
       </div>
 
-      <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 720, margin: '0 auto' }}>
+      <div style={{ position: 'relative', zIndex: 1, padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 760, margin: '0 auto', paddingBottom: 40 }}>
 
         {/* Streak */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
           <StreakBar />
         </motion.div>
 
-        {/* Engagement hint */}
+        {/* Info hint */}
         {!doneToday && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}
             style={{
-              background: 'rgba(184,134,11,0.08)',
-              border: '0.5px solid rgba(184,134,11,0.2)',
+              background: 'rgba(232,131,26,0.08)',
+              border: '0.5px solid rgba(232,131,26,0.2)',
               borderRadius: 12, padding: '10px 14px',
               display: 'flex', gap: 8, alignItems: 'flex-start',
             }}
           >
             <span style={{ fontSize: 14, flexShrink: 0 }}>💡</span>
-            <p style={{ fontSize: 12, color: '#8B6040', lineHeight: 1.6 }}>
-              Read the shloka below and answer the reflection to earn your streak. Insight counts — not just opening the app.
+            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>
+              Read today's shloka and answer the reflection below to earn your streak. Insight counts — not just opening the app.
             </p>
           </motion.div>
         )}
 
-        {/* Shloka label */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ flex: 1, height: '0.5px', background: 'linear-gradient(90deg, transparent, rgba(184,134,11,0.3))' }} />
-          <span style={{ fontSize: 10, color: '#C4956A', letterSpacing: '.1em' }}>SHLOKA OF THE DAY</span>
-          <div style={{ flex: 1, height: '0.5px', background: 'linear-gradient(90deg, rgba(184,134,11,0.3), transparent)' }} />
+        {/* Divider */}
+        <div className="divider-gold">
+          <span style={{ fontFamily: 'Noto Sans Devanagari', fontSize: 18, color: '#C8960C' }}>ॐ</span>
         </div>
 
-        {/* Main card */}
+        {/* Shloka card */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
           <ShlokaCard shloka={shloka} />
         </motion.div>
@@ -88,15 +91,22 @@ export function TodayPage() {
           <DailyCheckIn shloka={shloka} onComplete={() => setDone(true)} />
         </motion.div>
 
+        {/* Post-completion quote */}
         {doneToday && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            style={{ textAlign: 'center', padding: '12px 0' }}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            style={{
+              textAlign: 'center', padding: '20px',
+              background: 'rgba(200,150,12,0.06)',
+              border: '0.5px solid rgba(200,150,12,0.15)',
+              borderRadius: 16,
+            }}
           >
-            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 16, color: '#8B6040', fontStyle: 'italic' }}>
-              "You are what you believe in.<br />You become that which you believe you can become."
+            <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 18, fontStyle: 'italic', color: 'rgba(232,184,75,0.8)', lineHeight: 1.7 }}>
+              "Change is the law of the universe.<br />You can be a millionaire or a pauper in an instant."
             </p>
-            <p style={{ fontSize: 11, color: '#C4956A', marginTop: 6 }}>— Bhagavad Gita</p>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginTop: 10, letterSpacing: '.06em' }}>
+              — BHAGAVAD GITA
+            </p>
           </motion.div>
         )}
       </div>

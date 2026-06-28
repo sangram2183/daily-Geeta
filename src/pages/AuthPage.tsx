@@ -178,7 +178,7 @@ export function AuthPage() {
                 background: 'rgba(255,255,255,0.08)',
                 border: '0.5px solid rgba(184,134,11,0.3)',
                 borderRadius: 14, fontSize: 16,
-                color: '#fff', outline: 'none',
+                color: '#FAF0DC !important', outline: 'none',
                 marginBottom: 16, textAlign: 'center',
                 fontFamily: 'Cormorant Garamond, serif',
               }}
