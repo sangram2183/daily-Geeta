@@ -30,7 +30,7 @@ export function ShlokaDetailPage() {
         </h1>
       </div>
       <div className="px-4">
-        <ShlokaCard shloka={shloka} showReflection={true} />
+      <ShlokaCard shloka={shloka} />
       </div>
     </div>
   )
