@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Home, BookOpen, Bookmark, Search, Settings } from 'lucide-react'
+import { Home, BookOpen, Search, Bookmark, Settings } from 'lucide-react'
 
 const tabs = [
   { to: '/', icon: Home, label: 'Today' },
@@ -11,24 +11,46 @@ const tabs = [
 
 export function BottomNav() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-2 pb-safe">
-      <div className="max-w-md mx-auto flex">
-        {tabs.map(({ to, icon: Icon, label }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={to === '/'}
-            className={({ isActive }) =>
-              `flex-1 flex flex-col items-center py-2.5 gap-1 transition-colors ${
-                isActive ? 'text-amber-600' : 'text-gray-400 hover:text-gray-600'
-              }`
-            }
-          >
-            <Icon size={20} />
-            <span className="text-xs">{label}</span>
-          </NavLink>
-        ))}
-      </div>
+    <nav className="bottom-nav" style={{
+      position: 'fixed', bottom: 0, left: 0, right: 0,
+      background: 'rgba(250,246,238,0.92)',
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)',
+      borderTop: '0.5px solid rgba(184,134,11,0.15)',
+      zIndex: 50,
+      alignItems: 'center',
+      paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+    }}>
+      {tabs.map(({ to, icon: Icon, label }) => (
+        <NavLink
+          key={to}
+          to={to}
+          end={to === '/'}
+          style={({ isActive }) => ({
+            flex: 1, display: 'flex', flexDirection: 'column',
+            alignItems: 'center', gap: 3,
+            padding: '10px 0 8px',
+            textDecoration: 'none',
+            color: isActive ? '#E8831A' : 'rgba(139,96,64,0.5)',
+            fontSize: 10, fontWeight: isActive ? 500 : 400,
+            transition: 'color 0.15s',
+          })}
+        >
+          {({ isActive }) => (
+            <>
+              <div style={{
+                width: 36, height: 28, borderRadius: 10,
+                background: isActive ? 'rgba(232,131,26,0.12)' : 'transparent',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'background 0.15s',
+              }}>
+                <Icon size={20} />
+              </div>
+              {label}
+            </>
+          )}
+        </NavLink>
+      ))}
     </nav>
   )
 }

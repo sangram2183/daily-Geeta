@@ -4,164 +4,156 @@ import { Bookmark, BookmarkCheck, Share2, Volume2, ChevronDown, ChevronUp } from
 import { useAppStore } from '../store/useAppStore'
 import type { Shloka } from '../utils/shlokaUtils'
 
-interface Props {
-  shloka: Shloka
-  showReflection?: boolean
-}
+interface Props { shloka: Shloka }
 
-export function ShlokaCard({ shloka, showReflection = false }: Props) {
-  const { language, fontSize, isBookmarked, addBookmark, removeBookmark, reflections, saveReflection } = useAppStore()
+export function ShlokaCard({ shloka }: Props) {
+  const { language, fontSize, isBookmarked, addBookmark, removeBookmark } = useAppStore()
   const [expanded, setExpanded] = useState(false)
-  const [reflection, setReflection] = useState(reflections[shloka.id] || '')
-  const [saved, setSaved] = useState(false)
-
   const bookmarked = isBookmarked(shloka.id)
 
-  const fontSizeMap = {
-    sm: { sanskrit: 'text-base', meaning: 'text-sm', trans: 'text-xs' },
-    md: { sanskrit: 'text-lg', meaning: 'text-base', trans: 'text-sm' },
-    lg: { sanskrit: 'text-xl', meaning: 'text-lg', trans: 'text-base' },
-  }
-  const fs = fontSizeMap[fontSize]
+  const fsMap = { sm: { s: 14, m: 13, t: 11 }, md: { s: 17, m: 15, t: 12 }, lg: { s: 20, m: 17, t: 14 } }
+  const fs = fsMap[fontSize]
 
   const handleShare = async () => {
-    const text = `🪔 Bhagavad Gita ${shloka.id}\n\n${shloka.sanskrit}\n\n${language === 'hi' ? shloka.meaning_hi : shloka.meaning_en}\n\n— Daily Gita App`
-    if (navigator.share) {
-      await navigator.share({ title: 'Daily Gita', text })
-    } else {
-      await navigator.clipboard.writeText(text)
-    }
-  }
-
-  const handleSaveReflection = () => {
-    saveReflection(shloka.id, reflection)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+    const text = `🪔 Bhagavad Gita ${shloka.id}\n\n${shloka.sanskrit}\n\n${language === 'hi' ? shloka.meaning_hi : shloka.meaning_en}\n\n— Daily Gita`
+    if (navigator.share) await navigator.share({ title: 'Daily Gita', text })
+    else await navigator.clipboard.writeText(text)
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="bg-white rounded-2xl shadow-sm border border-amber-100 overflow-hidden"
-    >
+    <div style={{
+      background: 'rgba(255,255,255,0.9)',
+      border: '0.5px solid rgba(184,134,11,0.2)',
+      borderRadius: 20,
+      boxShadow: '0 4px 24px rgba(184,134,11,0.08), 0 1px 4px rgba(0,0,0,0.04)',
+      overflow: 'hidden',
+    }}>
       {/* Chapter badge */}
-      <div className="bg-gradient-to-r from-amber-50 to-orange-50 px-5 py-3 border-b border-amber-100 flex items-center justify-between">
-        <span className="text-xs font-medium text-amber-700 tracking-wide">
-          Chapter {shloka.chapter} · Verse {shloka.verse}
+      <div style={{
+        background: 'linear-gradient(135deg, #FFF8E1, #FFF3E0)',
+        borderBottom: '0.5px solid rgba(184,134,11,0.15)',
+        padding: '10px 18px',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      }}>
+        <span style={{ fontSize: 11, color: '#B8860B', fontWeight: 600, letterSpacing: '.06em' }}>
+          CHAPTER {shloka.chapter} · VERSE {shloka.verse}
         </span>
-        <span className="text-xs text-amber-600">{shloka.chapter_name}</span>
+        <span style={{ fontSize: 11, color: '#C4956A' }}>{shloka.chapter_name}</span>
       </div>
 
-      <div className="p-5 space-y-4">
+      <div style={{ padding: 20 }}>
         {/* Sanskrit */}
-        <div>
-          <p className={`font-devanagari ${fs.sanskrit} text-gray-800 leading-relaxed`}>
-            {shloka.sanskrit}
-          </p>
-        </div>
+        <p style={{
+          fontFamily: 'Noto Sans Devanagari, sans-serif',
+          fontSize: fs.s, color: '#1A0A00', lineHeight: 1.9,
+          marginBottom: 12,
+        }}>
+          {shloka.sanskrit}
+        </p>
 
         {/* Transliteration */}
-        <div>
-          <p className={`${fs.trans} text-gray-500 italic leading-relaxed`}>
-            {shloka.transliteration}
-          </p>
-        </div>
+        <p style={{
+          fontFamily: 'Cormorant Garamond, serif',
+          fontSize: fs.t + 1, color: '#C4956A', fontStyle: 'italic',
+          lineHeight: 1.7, marginBottom: 16,
+        }}>
+          {shloka.transliteration}
+        </p>
 
         {/* Divider */}
-        <div className="border-t border-gray-100" />
-
-        {/* Meaning */}
-        <div>
-          <p className="text-xs text-gray-400 mb-2 uppercase tracking-wider">
-            {language === 'hi' ? 'अर्थ' : 'Meaning'}
-          </p>
-          <p className={`${fs.meaning} text-gray-700 leading-relaxed`}>
-            {language === 'hi' ? shloka.meaning_hi : shloka.meaning_en}
-          </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+          <div style={{ flex: 1, height: '0.5px', background: 'linear-gradient(90deg, transparent, rgba(184,134,11,0.3), transparent)' }} />
+          <span style={{ fontSize: 14, color: '#DAA520' }}>ॐ</span>
+          <div style={{ flex: 1, height: '0.5px', background: 'linear-gradient(90deg, transparent, rgba(184,134,11,0.3), transparent)' }} />
         </div>
 
+        {/* Meaning */}
+        <p style={{ fontSize: 10, color: '#C4956A', letterSpacing: '.08em', marginBottom: 8 }}>
+          {language === 'hi' ? 'अर्थ' : 'MEANING'}
+        </p>
+        <p style={{
+          fontFamily: language === 'hi' ? 'Noto Sans Devanagari, sans-serif' : 'Cormorant Garamond, serif',
+          fontSize: fs.m + 1, color: '#2D1500', lineHeight: 1.75,
+        }}>
+          {language === 'hi' ? shloka.meaning_hi : shloka.meaning_en}
+        </p>
+
         {/* Tags */}
-        <div className="flex flex-wrap gap-1.5">
-          {shloka.tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-xs px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-100"
-            >
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 14 }}>
+          {shloka.tags?.map((tag: string) => (
+            <span key={tag} style={{
+              fontSize: 10, padding: '3px 10px',
+              borderRadius: 20,
+              background: 'rgba(184,134,11,0.08)',
+              color: '#8B6040',
+              border: '0.5px solid rgba(184,134,11,0.15)',
+            }}>
               {tag}
             </span>
           ))}
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-2 pt-1">
+        <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
           <button
             onClick={() => bookmarked ? removeBookmark(shloka.id) : addBookmark(shloka.id)}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-              bookmarked
-                ? 'bg-amber-100 text-amber-700'
-                : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
-            }`}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              padding: '8px 14px', borderRadius: 10, fontSize: 12, fontWeight: 500,
+              border: `0.5px solid ${bookmarked ? '#DAA520' : 'rgba(184,134,11,0.2)'}`,
+              background: bookmarked ? '#FFF8E1' : 'transparent',
+              color: bookmarked ? '#B8860B' : '#8B6040',
+              cursor: 'pointer', transition: 'all 0.15s',
+            }}
           >
-            {bookmarked ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
+            {bookmarked ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
             {bookmarked ? 'Saved' : 'Save'}
           </button>
 
           <button
             onClick={handleShare}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all"
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              padding: '8px 14px', borderRadius: 10, fontSize: 12, fontWeight: 500,
+              border: '0.5px solid rgba(184,134,11,0.2)',
+              background: 'transparent', color: '#8B6040',
+              cursor: 'pointer', transition: 'all 0.15s',
+            }}
           >
-            <Share2 size={15} />
-            Share
+            <Share2 size={14} /> Share
           </button>
-
-          {shloka.audio_url && (
-            <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium bg-gray-50 text-gray-600 hover:bg-gray-100 transition-all">
-              <Volume2 size={15} />
-              Listen
-            </button>
-          )}
 
           <button
             onClick={() => setExpanded(!expanded)}
-            className="ml-auto flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+            style={{
+              marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 4,
+              background: 'none', border: 'none', color: '#C4956A',
+              fontSize: 11, cursor: 'pointer',
+            }}
           >
             {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
             {expanded ? 'Less' : 'More'}
           </button>
         </div>
 
-        {/* Expandable: reflection */}
+        {/* Expandable commentary */}
         <AnimatePresence>
-          {(expanded || showReflection) && (
+          {expanded && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="overflow-hidden"
+              style={{ overflow: 'hidden' }}
             >
-              <div className="pt-3 border-t border-gray-100 space-y-2">
-                <p className="text-xs text-gray-400 uppercase tracking-wider">Your reflection</p>
-                <textarea
-                  value={reflection}
-                  onChange={(e) => setReflection(e.target.value)}
-                  placeholder="How does this shloka speak to you today?"
-                  rows={3}
-                  className="w-full text-sm text-gray-700 placeholder-gray-300 border border-gray-100 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-amber-200 bg-amber-50/30"
-                />
-                <button
-                  onClick={handleSaveReflection}
-                  className="text-xs px-3 py-1.5 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors font-medium"
-                >
-                  {saved ? '✓ Saved!' : 'Save reflection'}
-                </button>
+              <div style={{ paddingTop: 16, borderTop: '0.5px solid rgba(184,134,11,0.1)', marginTop: 14 }}>
+                <p style={{ fontSize: 11, color: '#C4956A', letterSpacing: '.07em', marginBottom: 8 }}>CHAPTER NAME</p>
+                <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 15, color: '#2D1500', marginBottom: 4 }}>{shloka.chapter_name}</p>
+                <p style={{ fontFamily: 'Noto Sans Devanagari, sans-serif', fontSize: 13, color: '#8B6040' }}>{shloka.chapter_name_hi}</p>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-    </motion.div>
+    </div>
   )
 }

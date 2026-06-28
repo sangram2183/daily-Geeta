@@ -1,46 +1,36 @@
-/** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+        serif: ['Cormorant Garamond', 'serif'],
         devanagari: ['Noto Sans Devanagari', 'sans-serif'],
       },
       colors: {
-        saffron: {
-          50:  '#fff8f0',
-          100: '#fff0d6',
-          200: '#ffdda3',
-          400: '#f5a623',
-          600: '#d4830a',
-          800: '#7c4a00',
-        },
-        lotus: {
-          50:  '#fdf2f8',
-          100: '#fce7f3',
-          400: '#e879a0',
-          600: '#c2185b',
-          800: '#7b0e3a',
-        },
-        deep: {
-          800: '#1a1033',
-          900: '#0d0820',
-        }
+        saffron: { DEFAULT: '#E8831A', light: '#F5A623', pale: '#FFF3E0', dark: '#C46A0A' },
+        gold: { DEFAULT: '#B8860B', light: '#DAA520', pale: '#FFF8E1' },
+        lotus: { DEFAULT: '#C2185B', pale: '#FCE4EC' },
+        cream: { DEFAULT: '#FAF6EE', dark: '#F5EDD8', darker: '#EDE0C4' },
+        warm: { DEFAULT: '#3D2000', muted: '#8B6040', light: '#C4956A' },
+        deep: { DEFAULT: '#1A0A00', '2': '#2D1A00' },
       },
       animation: {
-        'fade-up': 'fadeUp 0.6s ease-out',
-        'shimmer': 'shimmer 2s infinite',
+        'float': 'float 3s ease-in-out infinite',
+        'fade-up': 'fadeUp 0.5s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+        'shimmer': 'shimmer 2.5s infinite',
+        'spin-slow': 'spin 8s linear infinite',
       },
-      keyframes: {
-        fadeUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        shimmer: {
-          '0%': { backgroundPosition: '-200% 0' },
-          '100%': { backgroundPosition: '200% 0' },
-        }
+      backgroundImage: {
+        'spiritual': 'linear-gradient(135deg, #FAF6EE 0%, #FFF3E0 50%, #FAF0E6 100%)',
+        'saffron-grad': 'linear-gradient(135deg, #E8831A, #F5A623)',
+        'gold-grad': 'linear-gradient(135deg, #B8860B, #DAA520)',
+      },
+      boxShadow: {
+        'spiritual': '0 2px 20px rgba(184,134,11,0.08)',
+        'saffron': '0 4px 15px rgba(232,131,26,0.3)',
+        'glow': '0 0 30px rgba(245,166,35,0.2)',
       }
     },
   },
